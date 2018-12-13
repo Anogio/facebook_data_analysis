@@ -1,6 +1,5 @@
 import json
 import basemap
-import pillow
 from Python.tools.helpers import resolve_path
 
 DATA_FOLDER = 'Data/'
