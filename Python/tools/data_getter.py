@@ -1,5 +1,4 @@
 import json
-import basemap
 from Python.tools.helpers import resolve_path
 
 DATA_FOLDER = 'Data/'
