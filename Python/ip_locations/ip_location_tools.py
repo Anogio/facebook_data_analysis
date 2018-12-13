@@ -1,11 +1,13 @@
 import requests
 from tqdm import tqdm
+
 from Python.tools.helpers import generate_sublists
 
 API_URL = 'http://ip-api.com/batch'
 DEFAULT_FIELDS = frozenset(['lat', 'lon', 'countryCode'])
 
 MAX_API_BATCH_SIZE = 100
+
 
 def format_one_ip(ip, required_fields=DEFAULT_FIELDS):
     return {'query': ip, 'fields': ','.join(required_fields)}

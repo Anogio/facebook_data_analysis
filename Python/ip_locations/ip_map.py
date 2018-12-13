@@ -6,4 +6,3 @@ def get_all_coordinates():
     ips = get_ips_list()
     print('Getting location info for {} IP addresses'.format(len(ips)))
     return get_ips_info_using_api(ips, ['lon', 'lat'])
-
