@@ -6,7 +6,7 @@ from Python.tools.helpers import generate_sublists
 API_URL = 'http://ip-api.com/batch'
 DEFAULT_FIELDS = frozenset(['lat', 'lon', 'countryCode'])
 
-MAX_API_BATCH_SIZE = 100
+MAX_API_BATCH_SIZE = 50
 
 
 def format_one_ip(ip, required_fields=DEFAULT_FIELDS):
@@ -21,5 +21,5 @@ def get_ips_info_using_api(ips, required_fields=DEFAULT_FIELDS, max_batch=MAX_AP
     with tqdm(total=len(ips)) as pbar:
         for sublist in tqdm(generate_sublists(data, max_batch)):
             all_responses += requests.post(API_URL, json=sublist).json()
-            pbar.update()
+            pbar.update(len(sublist))
     return all_responses

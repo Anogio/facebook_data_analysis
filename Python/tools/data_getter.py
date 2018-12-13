@@ -14,5 +14,4 @@ def get_file(file):
 
 def get_ips_list():
     ips = get_file(IP_FILE)
-
     return [entry['ip'] for entry in ips['used_ip_address']]
