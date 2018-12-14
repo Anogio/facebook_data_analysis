@@ -1,5 +1,5 @@
 import plotly.offline as py
-
+import os
 
 def make_map(coordinates_df):
     data = [dict(
@@ -34,4 +34,4 @@ def make_map(coordinates_df):
     )
 
     fig = dict(data=data, layout=layout)
-    py.plot(fig, filename='ip_locations.html')
+    py.plot(fig, filename=os.path.join('Output', 'ip_locations.html'))
