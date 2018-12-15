@@ -15,7 +15,7 @@ def format_one_ip(ip, required_fields):
 
 
 def get_ips_info_using_api(ips, required_fields, max_batch=MAX_API_BATCH_SIZE):
-    print('Getting location info for {} IP addresses'.format(len(ips)))
+    print('Getting location info for {} IP addresses...'.format(len(ips)))
     data = [format_one_ip(ip, required_fields) for ip in ips]
 
     all_responses = []
@@ -24,6 +24,8 @@ def get_ips_info_using_api(ips, required_fields, max_batch=MAX_API_BATCH_SIZE):
         for sublist in tqdm(generate_sublists(data, max_batch)):
             all_responses += requests.post(API_URL, json=sublist).json()
             pbar.update(len(sublist))
+    print('Done.')
+    print()
     return all_responses
 
 

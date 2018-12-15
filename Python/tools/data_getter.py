@@ -3,14 +3,14 @@ import os
 
 from Python.tools.helpers import resolve_path
 
-DATA_FOLDER = 'Data/'
-CONVERSATIONS_FOLDER = 'messages/'
+DATA_FOLDER = 'Data'
+CONVERSATIONS_FOLDER = 'messages'
 
 IP_FILE = 'security_and_login_information/used_ip_addresses.json'
 
 
 def get_file(file):
-    with open(resolve_path(DATA_FOLDER + file), 'r') as file:
+    with open(resolve_path(DATA_FOLDER, file), 'r') as file:
         return json.load(file)
 
 
@@ -21,6 +21,7 @@ def get_ips_list():
 
 def get_conversations():
     conversations = []
+    print('Retrieving conversations...')
     for path, subdirs, files in os.walk(resolve_path(DATA_FOLDER, CONVERSATIONS_FOLDER)):
         for name in files:
             if name == 'message.json':
