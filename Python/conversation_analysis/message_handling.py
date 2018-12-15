@@ -3,7 +3,7 @@ import pandas as pd
 
 from Python.global_vars import messages_cols
 from Python.tools.data_getter import get_conversations
-from Python.tools.helpers import cached
+from Python.tools.helpers import cached, timestamp_to_local_date
 
 
 @cached('messages.db')
@@ -19,7 +19,10 @@ def generate_messages_dataframe(conversations):
         if messages_cols.sender not in conversation_df.columns:
             conversation_df[messages_cols.sender] = np.nan
 
-        messages_df = messages_df.append(conversation_df[[messages_cols.conversation, messages_cols.sender, messages_cols.timestamp]])
+        messages_df = messages_df.append(
+            conversation_df[[messages_cols.conversation, messages_cols.sender, messages_cols.timestamp]])
+    print('Converting timestamps to dates...')
+    messages_df['date'] = messages_df[messages_cols.timestamp].apply(timestamp_to_local_date)
     print('Done.')
     print()
     return messages_df
