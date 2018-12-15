@@ -1,5 +1,5 @@
 import time
-
+import os
 from Python.conversation_analysis.activity_graphs import top_people_graph, all_messages_over_time
 from Python.conversation_analysis.message_handling import get_messages_with_post_treatment
 from Python.ip_locations_map.ip_location_tools import get_all_coordinates

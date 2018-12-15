@@ -1,6 +1,7 @@
 import os
 import pickle
 from datetime import datetime
+
 from dateutil import tz
 
 from Python.global_vars import no_cache
@@ -12,6 +13,11 @@ OUTPUT_FOLDER = 'Output'
 
 def resolve_path(*paths):
     return os.path.join(_PROJECT_ROOT_DIR, *paths)
+
+
+output_path = resolve_path(OUTPUT_FOLDER)
+if not os.path.isdir(output_path):
+    os.makedirs(output_path)
 
 
 def generate_sublists(list_to_split, max_sublist_size):
