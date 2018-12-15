@@ -8,6 +8,9 @@ def resolve_path(*paths):
 
 
 def generate_sublists(list_to_split, max_sublist_size):
+    """"
+    Takes a list and returns a list of lists with a given maximum size
+    """
     if not list_to_split:
         yield []
 
