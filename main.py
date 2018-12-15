@@ -12,6 +12,6 @@ make_map(coordinates)
 
 # Conversation analysis
 ## Boilerplate to get messages info
-messages_df = get_messages_with_post_treatment()
+messages_df, conversation_stat_df = get_messages_with_post_treatment(MY_NAME)
 ## Activity graphs
-top_people_graph(messages_df, MY_NAME, 30)
+top_people_graph(messages_df, conversation_stat_df, MY_NAME, top_n=30)
