@@ -30,3 +30,12 @@ def top_people_graph(messages_df, conversations_df, my_name, top_n):
 
     return n_messages_by_person.plot(kind='barh', x=messages_cols.sender,
                                      y='n_messages_weighted_by_conversation_activity')
+
+
+@save_graph('total_messages')
+def all_messages_over_time(messages_df, interval):
+    messages_df['one'] = 1
+    rolling_n_messages = messages_df.set_index(messages_cols.date).sort_index()['one'].rolling(interval).sum().rename(
+        'n_messages_per_week').reset_index()
+
+    return rolling_n_messages.plot(x='date', y='n_messages_per_week')
