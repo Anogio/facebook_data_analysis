@@ -1,8 +1,9 @@
+import pandas as pd
 import requests
 from tqdm import tqdm
-import pandas as pd
 
 from Python.tools.data_getter import get_ips_list
+from Python.tools.helpers import cached
 from Python.tools.helpers import generate_sublists
 
 API_URL = 'http://ip-api.com/batch'
@@ -29,6 +30,7 @@ def get_ips_info_using_api(ips, required_fields, max_batch=MAX_API_BATCH_SIZE):
     return all_responses
 
 
+@cached('ip_coordinates.db')
 def get_all_coordinates():
     ips = get_ips_list()
     coordinates = get_ips_info_using_api(ips, ['lon', 'lat', 'query', 'city', 'country'])

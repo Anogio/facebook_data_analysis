@@ -1,9 +1,12 @@
 import os
+import pickle
 from datetime import datetime
 
 from dateutil import tz
 
 _PROJECT_ROOT_DIR = os.path.join(os.path.dirname(__file__), '../../')
+CACHE_FOLDER = 'cache'
+OUTPUT_FOLDER = 'Output'
 
 
 def resolve_path(*paths):
@@ -35,3 +38,26 @@ def timestamp_to_local_date(timestamp_ms):
     local = utc.astimezone(to_zone)
 
     return local
+
+
+def cached(file_name):
+    def decorator(wrapped):
+        cache_path = resolve_path(CACHE_FOLDER)
+        file_path = resolve_path(CACHE_FOLDER, file_name)
+
+        if not os.path.isdir(cache_path):
+            os.makedirs(cache_path)
+
+        def decorated(*args, **kwargs):
+            if not os.path.isfile(file_path):
+                res = wrapped(*args, **kwargs)
+                with open(file_path, 'wb') as file:
+                    pickle.dump(res, file)
+            else:
+                with open(file_path, 'rb') as file:
+                    res = pickle.load(file)
+            return res
+
+        return decorated
+
+    return decorator

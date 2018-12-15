@@ -2,5 +2,5 @@ Data/
 Output/
 venv/
 .idea
-*.hdf
+cache/
 __pycache__/
