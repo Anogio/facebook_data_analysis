@@ -1,8 +1,9 @@
 import os
 import pickle
 from datetime import datetime
-
 from dateutil import tz
+
+from Python.global_vars import no_cache
 
 _PROJECT_ROOT_DIR = os.path.join(os.path.dirname(__file__), '../../')
 CACHE_FOLDER = 'cache'
@@ -49,7 +50,7 @@ def cached(file_name):
             os.makedirs(cache_path)
 
         def decorated(*args, **kwargs):
-            if not os.path.isfile(file_path):
+            if not os.path.isfile(file_path) or no_cache:
                 res = wrapped(*args, **kwargs)
                 with open(file_path, 'wb') as file:
                     pickle.dump(res, file)
