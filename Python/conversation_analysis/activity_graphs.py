@@ -1,43 +1,23 @@
-import os
-
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
+from Python.tools.helpers import resolve_path, OUTPUT_FOLDER
 
 
-def generate_messages_dataframe(conversations):
-    messages_df = pd.DataFrame()
-    print('Generating dataframe to store all messages...')
-    for conversation in conversations:
-        conversation_df = pd.DataFrame(conversation['messages'])
-        if 'title' in conversation:
-            conversation_df['conversation_name'] = conversation['title']
-        else:
-            conversation_df['conversation_name'] = np.nan
-        if 'sender_name' not in conversation_df.columns:
-            conversation_df['sender_name'] = np.nan
+def save_graph(file_name):
+    def decorator(wrapped):
+        def decorated(*args, **kwargs):
+            res = wrapped(*args, **kwargs)
+            fig = res.get_figure()
 
-        messages_df = messages_df.append(conversation_df[['conversation_name', 'sender_name', 'timestamp_ms']])
-    print('Done.')
-    print()
-    return messages_df
+            file_path = resolve_path(OUTPUT_FOLDER, file_name)
+            fig.savefig(file_path, bbox_inches='tight')
+            return res
+
+        return decorated
+    return decorator
 
 
-def get_messages_dataframe(conversations):
-    if os.path.isfile('messages.hdf'):
-        print('Retrieving existing messages dataframe...')
-        messages_df = pd.read_hdf('messages.hdf')
-        print('Done.')
-        print()
-        return messages_df
-    messages_df = generate_messages_dataframe(conversations)
-    messages_df.to_hdf('messages.hdf', 'messages')
-    return messages_df
-
-
+@save_graph('top_people.pdf')
 def top_people_graph(messages_df, my_name, top_n):
     n_messages_by_person = messages_df.groupby('sender_name')['timestamp_ms'].count().drop(my_name).rename('n_messages')
     n_messages_by_person = n_messages_by_person.sort_values().iloc[-top_n:]
 
-    n_messages_by_person.plot(kind='barh', x='sender_name', y='n_messages')
-    plt.show()
+    return n_messages_by_person.plot(kind='barh', x='sender_name', y='n_messages')

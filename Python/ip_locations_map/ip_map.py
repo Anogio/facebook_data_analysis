@@ -36,4 +36,4 @@ def make_map(coordinates_df):
     )
 
     fig = dict(data=data, layout=layout)
-    py.plot(fig, filename=resolve_path('Output', 'ip_locations_map.html'))
+    py.plot(fig, filename=resolve_path('Output', 'ip_locations_map.html'), auto_open=False)
