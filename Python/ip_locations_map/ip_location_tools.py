@@ -25,7 +25,6 @@ def get_ips_info_using_api(ips, required_fields, max_batch=MAX_API_BATCH_SIZE):
         for sublist in tqdm(generate_sublists(data, max_batch)):
             all_responses += requests.post(API_URL, json=sublist).json()
             pbar.update(len(sublist))
-    print('Done.')
     print()
     return all_responses
 

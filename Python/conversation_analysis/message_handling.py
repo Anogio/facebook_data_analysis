@@ -4,7 +4,7 @@ import pandas as pd
 from Python.global_vars import messages_cols
 from Python.tools.data_getter import get_conversations
 from Python.tools.helpers import cached, timestamp_to_local_date
-
+import ftfy
 
 @cached('messages.db')
 def generate_messages_dataframe(conversations):
@@ -15,15 +15,19 @@ def generate_messages_dataframe(conversations):
         if 'title' in conversation:
             conversation_df[messages_cols.conversation] = conversation['title']
         else:
-            conversation_df[messages_cols.conversation] = np.nan
+            conversation_df[messages_cols.conversation] = ''
         if messages_cols.sender not in conversation_df.columns:
-            conversation_df[messages_cols.sender] = np.nan
+            conversation_df[messages_cols.sender] = ''
 
         messages_df = messages_df.append(
             conversation_df[[messages_cols.conversation, messages_cols.sender, messages_cols.timestamp]])
     print('Converting timestamps to dates...')
-    messages_df['date'] = messages_df[messages_cols.timestamp].apply(timestamp_to_local_date)
-    print('Done.')
+    messages_df[messages_cols.date] = messages_df[messages_cols.timestamp].apply(timestamp_to_local_date)
+
+    print('Fixing text encoding...')
+    messages_df[messages_cols.conversation] = messages_df[messages_cols.conversation].apply(ftfy.fix_text)
+    messages_df[messages_cols.sender] = messages_df[messages_cols.sender].apply(ftfy.fix_text)
+
     print()
     return messages_df
 

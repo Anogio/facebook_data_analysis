@@ -18,11 +18,11 @@ messages_df, conversation_stat_df = get_messages_with_post_treatment(MY_NAME)
 ## Activity graphs
 print('Generating top people graph...')
 top_people_graph(messages_df, conversation_stat_df, MY_NAME, top_n=30)
-print('Generating rolling messages_graph...')
-all_messages_over_time(messages_df, '7d')
+print('Generating messages by week graph...')
+# all_messages_over_time(messages_df, '7d')
 
 print('Generating single person graphs')
-detail_on = 'Dimitri Keriven Serpollet'
+detail_on = 'Dimitri Lozeve'
 one_person_graphs(messages_df, detail_on)
 print()
 print('Analysis completed in {time:.2f}s'.format(time=time.time() - t0))
