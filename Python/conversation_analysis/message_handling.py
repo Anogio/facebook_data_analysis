@@ -30,13 +30,20 @@ def generate_messages_dataframe(conversations):
 
 def conversation_stats(messages_df, my_name):
     total_messages_by_conversation = messages_df.groupby(messages_cols.conversation)[messages_cols.timestamp].count()
-    my_messages_by_conversation = messages_df[messages_df[messages_cols.sender] == my_name].groupby(messages_cols.conversation)[messages_cols.timestamp].count()
+    my_messages_by_conversation = \
+        messages_df[messages_df[messages_cols.sender] == my_name].groupby(messages_cols.conversation)[
+            messages_cols.timestamp
+        ].count()
 
-    my_participation_by_conversation = (my_messages_by_conversation / total_messages_by_conversation).rename('my_participation_ratio').fillna(0)
-    n_participants_by_conversation = messages_df.groupby(messages_cols.conversation)[messages_cols.sender].nunique().rename('n_participants')
+    my_participation_by_conversation = (my_messages_by_conversation / total_messages_by_conversation).rename(
+        'my_participation_ratio').fillna(0)
+    n_participants_by_conversation = messages_df.groupby(messages_cols.conversation)[
+        messages_cols.sender].nunique().rename('n_participants')
 
-    my_involvement_by_conversation = (n_participants_by_conversation * my_participation_by_conversation).rename('my_relative_participation')
-    return pd.concat([my_participation_by_conversation, n_participants_by_conversation, my_involvement_by_conversation], axis=1).reset_index()
+    my_involvement_by_conversation = (n_participants_by_conversation * my_participation_by_conversation).rename(
+        'my_relative_participation')
+    return pd.concat([my_participation_by_conversation, n_participants_by_conversation, my_involvement_by_conversation],
+                     axis=1).reset_index()
 
 
 def get_messages_with_post_treatment(my_name):
