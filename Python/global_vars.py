@@ -5,4 +5,4 @@ class messages_cols:
     date = 'date'
 
 
-no_cache = True
+no_cache = False
