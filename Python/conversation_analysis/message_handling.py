@@ -33,7 +33,7 @@ def generate_messages_dataframe(conversations):
 
 
 def conversation_stats(messages_df, my_name):
-    total_messages_by_conversation = messages_df.groupby(messages_cols.conversation)[messages_cols.timestamp].count()
+    total_messages_by_conversation = messages_df.groupby(messages_cols.conversation)[messages_cols.timestamp].count().rename('n_messages')
     my_messages_by_conversation = \
         messages_df[messages_df[messages_cols.sender] == my_name].groupby(messages_cols.conversation)[
             messages_cols.timestamp
@@ -46,7 +46,8 @@ def conversation_stats(messages_df, my_name):
 
     my_involvement_by_conversation = (n_participants_by_conversation * my_participation_by_conversation).rename(
         'my_relative_participation')
-    return pd.concat([my_participation_by_conversation, n_participants_by_conversation, my_involvement_by_conversation],
+
+    return pd.concat([my_participation_by_conversation, n_participants_by_conversation, my_involvement_by_conversation, total_messages_by_conversation],
                      axis=1).reset_index()
 
 
