@@ -34,17 +34,32 @@ def save_graphs(file_names):
     return decorator
 
 
-@save_graph('top_people')
+@save_graphs(['top_people_all_conv', 'top_people_dm'])
 def top_people_graph(messages_df, conversations_df, my_name, top_n):
-    messages_df = pd.merge(messages_df, conversations_df, on=messages_cols.conversation, how='left')
+    messages_df = pd.merge(messages_df, conversations_df, on=messages_cols.conv_id, how='left')
 
+    # First, get number of messages on all conversations
     messages_df['conversation_weight'] = 1 / messages_df['n_participants']
     n_messages_by_person = messages_df.groupby(messages_cols.sender)['conversation_weight'].sum().drop(my_name).rename(
         'n_messages_weighted_by_conversation')
     n_messages_by_person = n_messages_by_person.sort_values().iloc[-top_n:]
 
+    # Second, get number of messages on direct messages
+    direct_messages_df = messages_df.loc[(messages_df['n_participants'] == 2) & (messages_df['sender_name'] != my_name)]
+    n_direct_messages_by_person = direct_messages_df.groupby(messages_cols.sender).size().reset_index(name='n_direct_messages')
+    n_direct_messages_by_person = n_direct_messages_by_person.sort_values(by='n_direct_messages').iloc[-top_n:]
+
     return n_messages_by_person.plot(kind='barh', x=messages_cols.sender,
-                                     y='n_messages_weighted_by_conversation_activity')
+                                     y='n_messages_weighted_by_conversation_activity'), \
+            n_direct_messages_by_person.plot(kind='barh', x=messages_cols.sender,
+                                     y='n_direct_messages')
+
+@save_graph('top_conversations')
+def top_conv_graph(conversations_df, top_n = 40):
+    n_messages_by_conv = conversations_df.sort_values(by='n_messages').iloc[-top_n:]
+    return n_messages_by_conv.plot(kind='barh', x=messages_cols.conv_id,
+                                     y='n_messages')
+
 
 
 @save_graph('total_messages')

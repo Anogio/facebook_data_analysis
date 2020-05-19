@@ -1,9 +1,10 @@
 import json
 import os
+import re
 
 from Python.tools.helpers import resolve_path
 
-DATA_FOLDER = 'Data'
+DATA_FOLDER = r'D:\Documents\FacebookData'
 CONVERSATIONS_FOLDER = 'messages'
 
 IP_FILE = 'security_and_login_information/used_ip_addresses.json'
@@ -26,11 +27,12 @@ def get_ips_list():
 def get_conversations():
     conversations = []
     print('Retrieving conversations...')
+    valid_file_name = re.compile('message_\d*.json')
     for path, subdirs, files in os.walk(resolve_path(DATA_FOLDER, CONVERSATIONS_FOLDER)):
         for name in files:
-            if name == 'message.json':
+            if valid_file_name.match(name):
                 conversations.append(read_json(os.path.join(path, name)))
     total_messages = sum([len(conversation['messages']) for conversation in conversations])
-    print('Retrieved {} conversations with a total of {} messages'.format(len(conversations), total_messages))
+    print('Retrieved {} conversation json files with a total of {} messages'.format(len(conversations), total_messages))
     print()
     return conversations
