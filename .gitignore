@@ -2,5 +2,6 @@ Data/*/*
 Output/
 venv/
 .idea
+.mypy_cache/
 cache/
 __pycache__/

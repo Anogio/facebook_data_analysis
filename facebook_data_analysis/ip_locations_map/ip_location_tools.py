@@ -29,8 +29,8 @@ def get_ips_info_using_api(ips, required_fields, max_batch=MAX_API_BATCH_SIZE):
 
 
 @cached("ip_coordinates.db")
-def get_all_coordinates():
-    ips = get_ips_list()
+def get_all_coordinates(data_folder):
+    ips = get_ips_list(data_folder)
     coordinates = get_ips_info_using_api(
         ips, ["lon", "lat", "query", "city", "country"]
     )

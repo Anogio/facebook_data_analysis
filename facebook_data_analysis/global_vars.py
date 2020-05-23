@@ -7,3 +7,4 @@ class messages_cols:
 
 
 no_cache = False
+OUTPUT_FOLDER = "Output"

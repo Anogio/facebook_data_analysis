@@ -4,10 +4,10 @@ from datetime import datetime
 
 from dateutil import tz
 from facebook_data_analysis.global_vars import no_cache
+from facebook_data_analysis.global_vars import OUTPUT_FOLDER
 
 _PROJECT_ROOT_DIR = os.path.join(os.path.dirname(__file__), "../../")
 CACHE_FOLDER = "cache"
-OUTPUT_FOLDER = "Output"
 
 
 def resolve_path(*paths):
@@ -15,14 +15,13 @@ def resolve_path(*paths):
 
 
 output_path = resolve_path(OUTPUT_FOLDER)
-if not os.path.isdir(output_path):
-    os.makedirs(output_path)
 
 
 def generate_sublists(list_to_split, max_sublist_size):
     """"
     Takes a list and returns a list of lists with a given maximum size
     """
+    # TODO: replace with funcy.chunks
     if not list_to_split:
         yield []
 

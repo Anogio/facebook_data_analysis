@@ -88,8 +88,8 @@ def conversation_stats(messages_df, my_name):
     ).reset_index()
 
 
-def get_messages_with_post_treatment(my_name):
-    conversations = get_conversations()
+def get_messages_with_post_treatment(my_name, data_folder):
+    conversations = get_conversations(data_folder)
     messages_df = generate_messages_dataframe(conversations)
     conversations_stat_df = conversation_stats(messages_df, my_name)
 

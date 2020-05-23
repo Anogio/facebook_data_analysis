@@ -1,6 +1,6 @@
 import pandas as pd
 from facebook_data_analysis.global_vars import messages_cols
-from facebook_data_analysis.tools.helpers import OUTPUT_FOLDER
+from facebook_data_analysis.global_vars import OUTPUT_FOLDER
 from facebook_data_analysis.tools.helpers import resolve_path
 
 
