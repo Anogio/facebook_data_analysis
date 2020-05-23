@@ -3,12 +3,11 @@ import pickle
 from datetime import datetime
 
 from dateutil import tz
+from facebook_data_analysis.global_vars import no_cache
 
-from Python.global_vars import no_cache
-
-_PROJECT_ROOT_DIR = os.path.join(os.path.dirname(__file__), '../../')
-CACHE_FOLDER = 'cache'
-OUTPUT_FOLDER = 'Output'
+_PROJECT_ROOT_DIR = os.path.join(os.path.dirname(__file__), "../../")
+CACHE_FOLDER = "cache"
+OUTPUT_FOLDER = "Output"
 
 
 def resolve_path(*paths):
@@ -28,7 +27,9 @@ def generate_sublists(list_to_split, max_sublist_size):
         yield []
 
     else:
-        breaks = list(range(0, len(list_to_split), max_sublist_size)) + [len(list_to_split)]
+        breaks = list(range(0, len(list_to_split), max_sublist_size)) + [
+            len(list_to_split)
+        ]
 
         start = breaks[0]
         for end in breaks[1:]:
@@ -37,7 +38,7 @@ def generate_sublists(list_to_split, max_sublist_size):
 
 
 def timestamp_to_local_date(timestamp_ms):
-    from_zone = tz.gettz('UTC')
+    from_zone = tz.gettz("UTC")
     to_zone = tz.tzlocal()
 
     utc = datetime.utcfromtimestamp(timestamp_ms / 1000)
@@ -58,10 +59,10 @@ def cached(file_name):
         def decorated(*args, **kwargs):
             if not os.path.isfile(file_path) or no_cache:
                 res = wrapped(*args, **kwargs)
-                with open(file_path, 'wb') as file:
+                with open(file_path, "wb") as file:
                     pickle.dump(res, file)
             else:
-                with open(file_path, 'rb') as file:
+                with open(file_path, "rb") as file:
                     res = pickle.load(file)
             return res
 
