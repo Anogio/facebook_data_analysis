@@ -16,9 +16,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--folder", type=str, required=True)
     parser.add_argument("-n", "--facebook_name", type=str)
+    parser.add_argument("-d", "--detail_friend_name", type=str)
     command_line_args = parser.parse_args()
 
     MY_NAME = command_line_args.facebook_name or input("Your exact facebook name: ")
+    DETAIL_ON_NAME = command_line_args.detail_friend_name or input(
+        "Facebook name of friend to build detailed "
+        "graph with (leave blank for random): "
+    )
     data_folder = command_line_args.folder
 
     # Create the folder for the outputs
@@ -26,8 +31,8 @@ if __name__ == "__main__":
         os.makedirs(helpers.output_path)
 
     if os.path.isdir(helpers.cache_path):
-        confirm = ""
-        while confirm not in ["y", "n"]:
+        confirm = None
+        while confirm not in ["y", "n", ""]:
             confirm = input(
                 "A cache is present from a previous run. Do you want to keep it ? (y/n): "
             ).lower()
@@ -50,7 +55,7 @@ if __name__ == "__main__":
     activity_graphs.top_people_graph(
         messages_df, conversation_stat_df, MY_NAME, top_n=30
     )
-    print("[SKIPPING] Generating messages by week graph...")
+    print("[SKIPPING to save compute time] Generating messages by week graph...")
     # all_messages_over_time(messages_df, "7d")
 
     print("Generating all conversations graphs")
@@ -58,7 +63,12 @@ if __name__ == "__main__":
     print()
 
     print("Generating single person graphs")
-    detail_on = "Teven Le Scao"
+    detail_on = (
+        DETAIL_ON_NAME
+        or messages_df.loc[messages_df["sender_name"] != MY_NAME]
+        .sample()["sender_name"]
+        .iloc[0]
+    )
     activity_graphs.one_person_graphs(messages_df, detail_on)
     print()
 
