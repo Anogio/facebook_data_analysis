@@ -1,6 +1,7 @@
 import pandas as pd
 from facebook_data_analysis.global_vars import messages_cols
 from facebook_data_analysis.global_vars import OUTPUT_FOLDER
+from facebook_data_analysis.tools.helpers import cached
 from facebook_data_analysis.tools.helpers import resolve_path
 
 
@@ -81,13 +82,12 @@ def top_conv_graph(conversations_df, top_n=40):
     return n_messages_by_conv.plot(kind="barh", x=messages_cols.conv_id, y="n_messages")
 
 
-@save_graph("total_messages")
-def all_messages_over_time(messages_df, interval):
+@cached("rolling.db")
+def get_rolling_n_messages(messages_df, interval, amount_column_name):
     messages_df = messages_df.copy()
     messages_df["one"] = 1
 
-    amount_column_name = "n_messages_per_" + interval
-    rolling_n_messages = (
+    return (
         messages_df.set_index(messages_cols.date)
         .sort_index()["one"]
         .rolling(interval)
@@ -96,6 +96,14 @@ def all_messages_over_time(messages_df, interval):
         .reset_index()
     )
 
+
+@save_graph("total_messages")
+def all_messages_over_time(messages_df, interval):
+    amount_column_name = "n_messages_per_" + interval
+
+    rolling_n_messages = get_rolling_n_messages(
+        messages_df, interval, amount_column_name
+    )
     return rolling_n_messages.plot(x="date", y=amount_column_name)
 
 

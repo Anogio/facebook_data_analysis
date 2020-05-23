@@ -3,11 +3,10 @@ import pickle
 from datetime import datetime
 
 from dateutil import tz
-from facebook_data_analysis.global_vars import no_cache
+from facebook_data_analysis.global_vars import CACHE_FOLDER
 from facebook_data_analysis.global_vars import OUTPUT_FOLDER
 
 _PROJECT_ROOT_DIR = os.path.join(os.path.dirname(__file__), "../../")
-CACHE_FOLDER = "cache"
 
 
 def resolve_path(*paths):
@@ -15,6 +14,7 @@ def resolve_path(*paths):
 
 
 output_path = resolve_path(OUTPUT_FOLDER)
+cache_path = resolve_path(CACHE_FOLDER)
 
 
 def generate_sublists(list_to_split, max_sublist_size):
@@ -49,14 +49,13 @@ def timestamp_to_local_date(timestamp_ms):
 
 def cached(file_name):
     def decorator(wrapped):
-        cache_path = resolve_path(CACHE_FOLDER)
         file_path = resolve_path(CACHE_FOLDER, file_name)
 
         if not os.path.isdir(cache_path):
             os.makedirs(cache_path)
 
         def decorated(*args, **kwargs):
-            if not os.path.isfile(file_path) or no_cache:
+            if not os.path.isfile(file_path):
                 res = wrapped(*args, **kwargs)
                 with open(file_path, "wb") as file:
                     pickle.dump(res, file)

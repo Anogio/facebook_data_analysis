@@ -18,11 +18,6 @@ repos:
       args:
        - --application-directories=./back
 
--   repo: https://github.com/asottile/yesqa
-    rev: v0.0.11
-    hooks:
-    -   id: yesqa
-
 -   repo: git://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:

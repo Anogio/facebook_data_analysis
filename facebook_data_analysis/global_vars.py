@@ -6,5 +6,5 @@ class messages_cols:
     conv_id = "conversation_id"
 
 
-no_cache = False
 OUTPUT_FOLDER = "Output"
+CACHE_FOLDER = "cache"
