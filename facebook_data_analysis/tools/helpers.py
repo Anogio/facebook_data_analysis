@@ -51,10 +51,10 @@ def cached(file_name):
     def decorator(wrapped):
         file_path = resolve_path(CACHE_FOLDER, file_name)
 
-        if not os.path.isdir(cache_path):
-            os.makedirs(cache_path)
-
         def decorated(*args, **kwargs):
+            if not os.path.isdir(cache_path):
+                os.makedirs(cache_path)
+
             if not os.path.isfile(file_path):
                 res = wrapped(*args, **kwargs)
                 with open(file_path, "wb") as file:
