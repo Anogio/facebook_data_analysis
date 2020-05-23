@@ -9,13 +9,15 @@ from tqdm import tqdm
 
 
 @cached("people_distance.db")
-def get_people_distances(messages_df, conversations_df, min_messages_to_appear=10):
+def get_people_distances(
+    messages_df, conversations_df, min_messages_to_appear=10
+):  # pylint: disable=too-many-locals
     group_conversations = conversations_df.loc[conversations_df["n_participants"] > 2][
-        "conversation_name"
+        messages_cols.conv_id
     ]
 
     messages_in_group_conversations = messages_df[
-        messages_df[messages_cols.conversation].isin(group_conversations.values)
+        messages_df[messages_cols.conv_id].isin(group_conversations.values)
     ]
     friends_in_group_conversations = messages_in_group_conversations.groupby(
         messages_cols.sender
@@ -28,11 +30,11 @@ def get_people_distances(messages_df, conversations_df, min_messages_to_appear=1
     ]
 
     participants_list_by_conversation = messages_in_group_conversations.groupby(
-        messages_cols.conversation
+        messages_cols.conv_id
     )[messages_cols.sender].unique()
 
     messages_by_person_by_conversation = messages_in_group_conversations.groupby(
-        [messages_cols.conversation, messages_cols.sender]
+        [messages_cols.conv_id, messages_cols.sender]
     )[messages_cols.timestamp].count()
     total_messages_by_person = messages_in_group_conversations.groupby(
         [messages_cols.sender]
@@ -43,7 +45,9 @@ def get_people_distances(messages_df, conversations_df, min_messages_to_appear=1
     for conversation in tqdm(participants_list_by_conversation.index):
         participants = participants_list_by_conversation[conversation]
         messages_by_person = messages_by_person_by_conversation[conversation]
-        for participant1 in range(len(participants)):
+        for participant1 in range(  # pylint: disable=consider-using-enumerate # TODO
+            len(participants)
+        ):
             for participant2 in range(participant1, len(participants)):
                 exchanged_messages = (
                     messages_by_person[participants[participant1]]

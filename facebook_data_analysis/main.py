@@ -1,5 +1,6 @@
 import argparse
 import os
+import shutil
 import time
 
 from facebook_data_analysis.conversation_analysis.activity_graphs import (
@@ -29,6 +30,7 @@ from facebook_data_analysis.ip_locations_map.ip_location_tools import (
 from facebook_data_analysis.ip_locations_map.ip_map import make_map
 from facebook_data_analysis.tools.helpers import output_path
 
+
 if __name__ == "__main__":
     # Get the arguments of the script
     parser = argparse.ArgumentParser()
@@ -42,6 +44,15 @@ if __name__ == "__main__":
     # Create the folder for the outputs
     if not os.path.isdir(output_path):
         os.makedirs(output_path)
+    else:
+        confirm = ""
+        while confirm not in ["y", "n"]:
+            confirm = input(
+                "A cache is present from a previous run. Do you want to keep it ? (y/n)"
+            ).lower()
+            if confirm == "n":
+                shutil.rmtree(output_path)
+                os.makedirs(output_path)
 
     t0 = time.time()
     # IP location map
