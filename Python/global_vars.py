@@ -3,6 +3,7 @@ class messages_cols:
     sender = 'sender_name'
     timestamp = 'timestamp_ms'
     date = 'date'
+    conv_id = 'conversation_id'
 
 
 no_cache = False
