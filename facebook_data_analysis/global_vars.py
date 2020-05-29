@@ -4,6 +4,8 @@ class messages_cols:
     timestamp = "timestamp_ms"
     date = "date"
     conv_id = "conversation_id"
+    conv_type = "thread_type"
+    text = "content"
 
 
 OUTPUT_FOLDER = "Output"

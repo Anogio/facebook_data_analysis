@@ -12,16 +12,13 @@ def generate_messages_dataframe(conversations):
     print("Generating dataframe to store all messages...")
     for conversation in conversations:
         conversation_df = pd.DataFrame(conversation["messages"])
-        if "title" in conversation:
-            conversation_df[messages_cols.conversation] = conversation["title"]
-        else:
-            conversation_df[messages_cols.conversation] = ""
-        if "thread_path" in conversation:
-            conversation_df[messages_cols.conv_id] = conversation["thread_path"]
-        else:
-            conversation_df[messages_cols.conv_id] = ""
+        conversation_df[messages_cols.conversation] = conversation.get("title", "")
+        conversation_df[messages_cols.conv_id] = conversation.get("thread_path", "")
+        conversation_df[messages_cols.conv_type] = conversation.get("thread_type", "")
         if messages_cols.sender not in conversation_df.columns:
             conversation_df[messages_cols.sender] = ""
+        if messages_cols.text not in conversation_df.columns:
+            conversation_df[messages_cols.text] = ""
 
         messages_df = messages_df.append(
             conversation_df[
@@ -30,6 +27,8 @@ def generate_messages_dataframe(conversations):
                     messages_cols.sender,
                     messages_cols.timestamp,
                     messages_cols.conv_id,
+                    messages_cols.conv_type,
+                    messages_cols.text,
                 ]
             ]
         )
@@ -44,6 +43,9 @@ def generate_messages_dataframe(conversations):
     ].apply(ftfy.fix_text)
     messages_df[messages_cols.sender] = messages_df[messages_cols.sender].apply(
         ftfy.fix_text
+    )
+    messages_df[messages_cols.text] = (
+        messages_df[messages_cols.text].fillna("").apply(ftfy.fix_text)
     )
 
     print()

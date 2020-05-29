@@ -56,7 +56,7 @@ if __name__ == "__main__":
         messages_df, conversation_stat_df, MY_NAME, top_n=30
     )
     print("[SKIPPING to save compute time] Generating messages by week graph...")
-    # all_messages_over_time(messages_df, "7d")
+    activity_graphs.all_messages_over_time(messages_df, "7d")
 
     print("Generating all conversations graphs")
     activity_graphs.top_conv_graph(conversation_stat_df)
