@@ -1,11 +1,11 @@
-from typing import List
-from typing import Tuple
-
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from facebook_data_analysis.app_components import friend_detail_tab
+from facebook_data_analysis.app_components import conv_detail_tab
 from facebook_data_analysis.app_components import home_tab
+from facebook_data_analysis.app_components.friend_detail_tab import (
+    component as friend_detail_tab,
+)
 
 external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 
@@ -24,38 +24,13 @@ class AppMaker:
                 dcc.Tabs(
                     children=[
                         home_tab.attach(app),
-                        # Friend name input
                         friend_detail_tab.attach(app),
-                        # Conversation name input
-                        dcc.Tab(
-                            label="Detailed conversation view",
-                            children=[
-                                html.Label("Select conversation for detailed view"),
-                                dcc.Dropdown(
-                                    options=[
-                                        {"label": conv_name, "value": conv_id}
-                                        for conv_id, conv_name in self.group_conversations_list()
-                                    ]
-                                ),
-                            ],
-                        ),
+                        conv_detail_tab.attach(app),
                     ]
                 ),
             ]
         )
         return app
-
-    @staticmethod
-    def group_conversations_list() -> List[Tuple[str, str]]:
-        # conversations = (
-        #     self.conversations_df.loc[
-        #         self.conversations_df[messages_cols.conv_type] != "Regular"
-        #     ][[messages_cols.conv_id, messages_cols.conversation]]
-        #     .drop_duplicates()
-        #     .values.tolist()
-        # )
-        # return sorted(map(tuple, conversations))  # type: ignore
-        return []
 
 
 if __name__ == "__main__":

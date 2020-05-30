@@ -36,6 +36,7 @@ def base_elem():
                 placeholder="Upload your data first",
                 value="",
             ),
+            # Updating this component's children causes all of the other tabs to activate
             html.P(id="aggregation-finished"),
         ],
     )
@@ -65,12 +66,13 @@ def _attach_process_data(app: dash.Dash):
             Output("status-compute_data", "children"),
             Output("status-compute_data", "style"),
             Output("facebook-name", "disabled"),
+            Output("facebook-name", "placeholder"),
         ],
         [Input("op-compute-data", "children")],
     )  # pylint: disable=unused-variable
     def process_data(data_path):
         if not data_path:
-            return dash.no_update, dash.no_update, True
+            return dash.no_update, dash.no_update, True, dash.no_update
         try:
             conversations = message_handling.get_conversations(data_path)
             common.conversations_df = message_handling.generate_messages_dataframe(
@@ -81,11 +83,13 @@ def _attach_process_data(app: dash.Dash):
                 f"your facebook user name.",
                 {},
                 False,
+                "John Doe",
             )
         except Exception:  # pylint: disable=broad-except
             return (
                 "An error occurred while processing the data ! Please check the logs, refresh and try again",
                 {"color": "red"},
+                dash.no_update,
                 dash.no_update,
             )
 
