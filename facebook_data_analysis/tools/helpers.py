@@ -1,3 +1,4 @@
+import hashlib
 import os
 import pickle
 from datetime import datetime
@@ -47,11 +48,18 @@ def timestamp_to_local_date(timestamp_ms):
     return local
 
 
+def hash_string(string: str) -> str:
+    return hashlib.md5(string.encode()).hexdigest()
+
+
 def cached(file_name):
     def decorator(wrapped):
-        file_path = resolve_path(CACHE_FOLDER, file_name)
-
         def decorated(*args, **kwargs):
+            file_name_with_args = (
+                file_name + hash_string(str(*args) + str(**kwargs)) + ".cache"
+            )
+            file_path = resolve_path(CACHE_FOLDER, file_name_with_args)
+
             if not os.path.isdir(cache_path):
                 os.makedirs(cache_path)
 

@@ -82,7 +82,7 @@ def top_conv_graph(conversations_df, top_n=40):
     return n_messages_by_conv.plot(kind="barh", x=messages_cols.conv_id, y="n_messages")
 
 
-@cached("rolling.db")
+@cached("rolling")
 def get_rolling_n_messages(messages_df, interval, amount_column_name):
     messages_df = messages_df.copy()
     messages_df["one"] = 1

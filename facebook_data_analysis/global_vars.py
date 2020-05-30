@@ -10,3 +10,5 @@ class messages_cols:
 
 OUTPUT_FOLDER = "Output"
 CACHE_FOLDER = "cache"
+DATA_FOLDER = "Data"
+UPLOAD_NAME = "facebook_data.zip"

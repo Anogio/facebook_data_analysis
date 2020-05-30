@@ -8,7 +8,7 @@ from sklearn.manifold import MDS
 from tqdm import tqdm
 
 
-@cached("people_distance.db")
+@cached("people_distance")
 def get_people_distances(
     messages_df, conversations_df, min_messages_to_appear=10
 ):  # pylint: disable=too-many-locals
@@ -77,7 +77,7 @@ def get_people_distances(
     return distance
 
 
-@cached("projection_coordinates.db")
+@cached("projection_coordinates")
 def get_projection_coordinates(distance):
     mds = MDS(n_components=2, verbose=1, n_jobs=-1, dissimilarity="precomputed")
     coordinates = mds.fit_transform(distance.values)

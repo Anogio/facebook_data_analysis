@@ -4,13 +4,14 @@ from facebook_data_analysis.global_vars import messages_cols
 from facebook_data_analysis.tools.data_getter import get_conversations
 from facebook_data_analysis.tools.helpers import cached
 from facebook_data_analysis.tools.helpers import timestamp_to_local_date
+from tqdm import tqdm
 
 
-@cached("messages.db")
+@cached("messages")
 def generate_messages_dataframe(conversations):
     messages_df = pd.DataFrame()
     print("Generating dataframe to store all messages...")
-    for conversation in conversations:
+    for conversation in tqdm(conversations):
         conversation_df = pd.DataFrame(conversation["messages"])
         conversation_df[messages_cols.conversation] = conversation.get("title", "")
         conversation_df[messages_cols.conv_id] = conversation.get("thread_path", "")
