@@ -8,6 +8,7 @@ import dash_html_components as html
 from dash.dependencies import Input
 from dash.dependencies import Output
 from facebook_data_analysis import common
+from facebook_data_analysis.app_components.conv_detail_tab.graphs import graphs
 from facebook_data_analysis.global_vars import messages_cols
 
 
@@ -19,6 +20,11 @@ def base_elem():
         children=[
             html.Label("Select conversation for detailed view"),
             dcc.Dropdown(id="conversation-detail-name", options=[], value=""),
+            html.Div(
+                id="conversation-graphs",
+                style={"display": "none"},
+                children=[dcc.Graph()],
+            ),
         ],
     )
 
@@ -39,8 +45,8 @@ def _attach_update_conversations(app: dash.Dash):
         Output("conversation-detail-name", "options"),
         [Input("conversation-tab", "disabled")],
     )  # pylint: disable=unused-variable
-    def update_friends(friend_tab_disabled: bool) -> List[Dict[str, str]]:
-        if friend_tab_disabled:
+    def update_conversations(conv_tab_disabled: bool) -> List[Dict[str, str]]:
+        if conv_tab_disabled:
             return dash.no_update
 
         group_conversations = (
@@ -58,7 +64,26 @@ def _attach_update_conversations(app: dash.Dash):
         ]
 
 
+def compute_graphs(conv_name: str) -> List[dcc.Graph]:
+    return [graph(conv_name) for graph in graphs]
+
+
+def _attach_compute_and_show_graphs(app: dash.Dash):
+    @app.callback(
+        [
+            Output("conversation-graphs", "style"),
+            Output("conversation-graphs", "children"),
+        ],
+        [Input("conversation-detail-name", "value")],
+    )  # pylint: disable=unused-variable
+    def compute_and_show_graphs(conv_name: str):
+        if not conv_name:
+            return {"display": "none"}, []
+        return {}, compute_graphs(conv_name)
+
+
 def attach(app: dash.Dash):
     _attach_activate_tab(app)
     _attach_update_conversations(app)
+    _attach_compute_and_show_graphs(app)
     return base_elem()

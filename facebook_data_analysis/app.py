@@ -1,8 +1,10 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from facebook_data_analysis.app_components import conv_detail_tab
 from facebook_data_analysis.app_components import home_tab
+from facebook_data_analysis.app_components.conv_detail_tab import (
+    component as conv_detail_tab,
+)
 from facebook_data_analysis.app_components.friend_detail_tab import (
     component as friend_detail_tab,
 )
