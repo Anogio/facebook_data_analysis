@@ -9,7 +9,7 @@ Using python 3.7+ (3.6 should work)
 
 ## Running the script
 ### Get your Facebook data
-Go to https://www.facebook.com/dyi to request a copy of your data.
+Go to https://www.facebook.com/dyi to request a copy of your data in JSON format.
 It should be available for download within a few hours.
 
 ### Run the script
