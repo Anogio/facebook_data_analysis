@@ -1,5 +1,7 @@
 # facebook_data_analysis
 
+![Demo GIF](demo.gif?raw=true)
+
 ## Installation
 Using python 3.7+ (3.6 should work)
 
