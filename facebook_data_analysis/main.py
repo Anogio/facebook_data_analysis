@@ -50,6 +50,8 @@ if __name__ == "__main__":
     messages_df, conversation_stat_df = message_handling.get_messages_with_post_treatment(
         MY_NAME, data_folder
     )
+    messages_df = helpers.anonymize_data(messages_df)
+
     # Activity graphs
     print("Generating top people graph...")
     activity_graphs.top_people_graph(

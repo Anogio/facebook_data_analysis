@@ -3,9 +3,13 @@ import os
 import pickle
 from datetime import datetime
 
+import pandas as pd
 from dateutil import tz
 from facebook_data_analysis.global_vars import CACHE_FOLDER
+from facebook_data_analysis.global_vars import messages_cols
 from facebook_data_analysis.global_vars import OUTPUT_FOLDER
+from facebook_data_analysis.tools.fake_names import fake_names
+from tqdm import tqdm
 
 _PROJECT_ROOT_DIR = os.path.join(os.path.dirname(__file__), "../../")
 
@@ -75,3 +79,27 @@ def cached(file_name):
         return decorated
 
     return decorator
+
+
+@cached("anonymize_data")
+def anonymize_data(conversations_dataframe: pd.DataFrame) -> pd.DataFrame:
+    # TODO: make this function pure
+    contact_names = (
+        conversations_dataframe[messages_cols.sender].sort_values().unique().tolist()
+    )
+    contact_names = [contact for contact in contact_names if contact]
+    contact_replacements = {name: fake_names[i] for i, name in enumerate(contact_names)}
+
+    new_df = []
+    for _, row in tqdm(
+        conversations_dataframe.iterrows(), total=conversations_dataframe.shape[0]
+    ):
+        row[messages_cols.sender] = contact_replacements.get(
+            row[messages_cols.sender], ""
+        )
+        for name in contact_replacements:
+            row[messages_cols.conversation] = row[messages_cols.conversation].replace(
+                name, contact_replacements[name]
+            )
+        new_df.append(row)
+    return pd.DataFrame(new_df)

@@ -3,5 +3,6 @@ Output/
 venv/
 .idea
 .mypy_cache/
+.ipynb_checkpoints
 cache/
 __pycache__/

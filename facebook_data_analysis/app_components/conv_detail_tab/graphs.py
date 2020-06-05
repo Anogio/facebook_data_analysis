@@ -27,7 +27,7 @@ def conversation_activity_by_friend(conv_id: str) -> dcc.Graph:
         figure=px.pie(
             conv_df,
             names=messages_cols.sender,
-            title="Number of messages sent by this friend to the conversation",
+            title="Number of messages sent to the conversation, by friend",
         )
     )
 
